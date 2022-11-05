@@ -6,7 +6,7 @@
 /*   By: asalas-s <asalas-s@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 23:28:03 by asalas-s          #+#    #+#             */
-/*   Updated: 2022/11/05 20:18:21 by asalas-s         ###   ########.fr       */
+/*   Updated: 2022/11/05 21:37:03 by asalas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	ft_read_fd(int fd)
 	int		n_read;
 	char	*buff;
 	char	*eol;
-	char	*lineread;
-	char	*lastread;
+	char	*line;
+	char	*lastline;
 
 	n_read = 1;
 	buff = (char *)malloc (((BUFFER_SIZE) + 1) * sizeof(char));
@@ -33,13 +33,21 @@ int	ft_read_fd(int fd)
 	{
 		n_read = read(fd, buff, BUFFER_SIZE);
 		if (n_read == -1)
+		{
+			free(buff)
 			return (NULL);
+		}
 		ft_strlcat(buff, "\0", ((BUFFER_SIZE) + 1));
 		eol = ft_strchr(buff, '\n');
-		if (eol == NULL)
-			lineread = ft_strjoin(lastread, buff);
+		if (eol == NUL)
+			line = ft_strjoin(lastline, buff);
 		else
-			ft_strlcat(lineread, buff, (BUFFER_SIZE) - ft_strlen(eol));
+		{
+			ft_save_line(eol);
+			ft_get_line(line);
+			free(line);
+			return (0);
+		}
 	}
 }
 
