@@ -6,7 +6,7 @@
 /*   By: novasol <novasol@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 23:28:03 by asalas-s          #+#    #+#             */
-/*   Updated: 2022/11/14 16:36:44 by novasol          ###   ########.fr       */
+/*   Updated: 2022/11/14 18:47:31 by novasol          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,14 @@ char	*get_next_line(int fd)
 	if ((fd < 0) || (BUFFER_SIZE <= 0))
 		return (NULL);
 	returnl = ft_read_fd(fd, sline);
+	printf("\nGNL RETURNL INICIO:%s\n", returnl);
+	printf("\nGNL SLINE INICIO:%s\n", sline);
 	if (returnl)
 	{
 		sline = ft_save_line(returnl);
 		returnl = ft_get_line(returnl);
+		printf("\nGNL RETURNL NOT NULL RETURNL:%s\n", returnl);
+		printf("\nGNL RETURNL NOT NULL SLINE:%s\n", sline);
 		return (returnl);
 	}
 	else
@@ -32,8 +36,12 @@ char	*get_next_line(int fd)
 		{
 			returnl = ft_get_line(sline);
 			sline = ft_save_line(sline);
+			printf("\nGNL RETURNL NULL RETURNL:%s\n", returnl);
+			printf("\nGNL RETURNL NULL SLINE:%s\n", sline);
 			return (returnl);
 		}
+		printf("\nGNL RETURNL NULL SLINE NULL RETURNL:%s\n", returnl);
+		printf("\nGNL RETURNL NULL SLINE NULL SLINE:%s\n", sline);
 		return (returnl);
 	}
 }
@@ -52,7 +60,10 @@ char	*ft_read_buffer(int fd)
 		free(buff);
 		return (NULL);
 	}
-	buff[n_read] = '\0';
+	if (n_read >= 0)
+	{
+		buff[n_read] = '\0';
+	}	
 	return (buff);
 }
 
@@ -61,17 +72,21 @@ char	*ft_read_fd(int fd, char *sline)
 	char	*buff;
 
 	buff = ft_read_buffer(fd);
-	while ((buff) && (ft_strlen(buff) != 0))
+	while (buff)
 	{
 		if (sline == NULL)
 			sline = ft_strjoin ("", buff);
 		else
 			sline = ft_strjoin (sline, buff);
 		if (ft_strchr(buff, '\n'))
+		{
+			free(buff);
 			return (sline);
+		}
 		buff = ft_read_buffer(fd);
 	}
 	if (ft_strlen(sline) != 0)
+
 		return (sline);
 	else
 		return (NULL);
@@ -100,11 +115,12 @@ char	*ft_get_line(char	*sline)
 char	*ft_save_line(char	*sline)
 {
 	char	*eol;
+	char	*rsl;
 
 	eol = ft_strchr(sline, '\n');
-	if (eol != NULL)
-		sline = ft_strjoin(eol + 1, "");
+	if (eol)
+		rsl = ft_strjoin(eol + 1, "");
 	else
-		sline = NULL;
-	return (sline);
+		rsl = NULL;
+	return (rsl);
 }
