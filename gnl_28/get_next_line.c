@@ -6,7 +6,7 @@
 /*   By: asalas-s <asalas-s@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 23:28:03 by asalas-s          #+#    #+#             */
-/*   Updated: 2022/11/19 21:07:35 by asalas-s         ###   ########.fr       */
+/*   Updated: 2022/11/19 21:18:55 by asalas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ char	*ft_join_and_free(char	**s1, char	**s2)
 
 	str_out = ft_strjoin(*s1, *s2);
 	free(*s1);
+	*s1 = NULL;
 	free(*s2);
+	*s2 = NULL;
 	return (str_out);
 }
 
@@ -67,7 +69,9 @@ char	*ft_read_fd(int fd, int *n_read, char **sline)
 			return (NULL);
 		}
 		buff[*n_read] = '\0';
+		printf("entro:");
 		store = ft_join_and_free(sline, &buff);
+		printf("STORE:%s", store);
 		*sline = ft_join_and_free(&store, NULL);
 /*		store = ft_strjoin (*sline, buff);
 		free(*sline);

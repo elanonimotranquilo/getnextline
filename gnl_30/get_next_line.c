@@ -6,7 +6,7 @@
 /*   By: asalas-s <asalas-s@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 18:15:21 by asalas-s          #+#    #+#             */
-/*   Updated: 2022/11/20 20:59:34 by asalas-s         ###   ########.fr       */
+/*   Updated: 2022/11/20 21:31:41 by asalas-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,19 @@ char	*ft_read_fd(int fd, int *n_read, char **sline)
 			return (ft_free_clean(&buff));
 		buff[*n_read] = '\0';
 		store = ft_strjoin(*sline, buff);
-//		ft_free_clean(sline);
-//		*sline = ft_strjoin(store, NULL);
-//		ft_free_clean(&store);
-		if (ft_strchr(*sline, '\n'))
+		if (ft_strchr(store, '\n'))
 			break ;
+		ft_free_clean(sline);
+		*sline = ft_strjoin(store, NULL);
+		ft_free_clean(&store);
 	}
-	store = ft_strjoin (*sline, NULL);
+	if (*n_read == 0)
+	{
+		store = ft_save_line(*sline);
+		ft_free_clean(sline);
+	}
+	store = ft_strjoin(*sline, NULL);
+	ft_free_clean(sline);
 	*sline = ft_save_line(store);
 	ft_free_clean(&buff);
 	return (store);
